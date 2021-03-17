@@ -1,0 +1,35 @@
+.preregistea {
+  height: 100%;
+  width: 100%;
+  border: solid;
+}
+
+.preregistea > .container {
+  min-height: 100%;
+  max-width: 100%;
+}
+
+.preregistea > .container > .row {
+  display: flex;
+  margin: auto;
+  margin-bottom: 0 !important;
+}
+
+.displayarea {
+  border-right: solid 2px;
+  border-color: #4cae4c;
+}
+
+.inputarea > .container {
+  max-width: 100%;
+}
+
+.inputarea > .container > .inputarea-form > .add-category {
+  width: 100%;
+}
+
+.inputarea > .container > .inputarea-form > .add-category > .container {
+  max-width: 100%;
+}
+
+/*# sourceMappingURL=plugin.css.map */
