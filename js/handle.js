@@ -79,10 +79,46 @@ const updateHypothesisFormArea = (hypothesisPair, inputArea) => {
     let dv = hypothesisPair['dv'];
     let iv = hypothesisPair['iv'];
     let hypothesisFormArea;
-    if(iv.type === 'nominal') hypothesisFormArea = createHypothesisConditionIsNominal();
-    else hypothesisFormArea = createHypothesisConditionIsNotNominal();
+    if(iv.type === 'nominal') hypothesisFormArea = createHypothesisConditionIsNominal(dv, iv);
+    else hypothesisFormArea = createHypothesisConditionIsNotNominal(dv, iv);
 
+    // This is so important!
+    const apiBtn = $("<button type='button' class='btn btn-success submit'>Generate a Hypothesis</button>");
+    apiBtn.on("click", function() {
+        const conditionType = iv.type;
+        let relationship;
+        if(conditionType === "nominal") {
+            let two_side = false;
+            const selected = hypothesisFormArea.find(".two-side:selected").val();
+            if(selected === 'different') {
+                two_side = true;
+            }
+
+            let cat1 = hypothesisFormArea.find('.iv-group-custom-select-1:selected').val();
+            let cat2 = hypothesisFormArea.find('.iv-group-custom-select-2:selected').val();
+            if(selected === 'less') {
+                let temp = cat2;
+                cat2 = cat1;
+                cat1 = temp;
+            }
+            relationship = {
+                'condition_type': 'nominal',
+                'two-side': two_side,
+                'categories': [cat1, cat2]
+            }
+        } else {
+            let positive = false;
+            let posNeg = hypothesisFormArea.find('.positive-negative:selected').val();
+            if(posNeg) positive = true;
+            relationship = {
+                'condition_type' : conditionType,
+                'positive': positive
+            }
+        }
+        teaAPI(iv, dv, relationship);
+    })
     inputArea.append(hypothesisFormArea);
+    inputArea.append(apiBtn);
 }
 
 const updateVariable = (section_id, inputForm, variable = null) => {
@@ -268,9 +304,6 @@ const addListenertoHypothesisCard = (card, variable) => {
         }
         hypothesisPairListener.pair = hypothesisPair;
     }
-
-    console.log(analysisDV);
-    console.log(analysisCondition);
 }
 
 // const editInputFormArea = (card_id) => {

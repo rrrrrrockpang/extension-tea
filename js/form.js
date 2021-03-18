@@ -85,8 +85,8 @@ const createInitialButton = (id, text) => {
         })
 }
 
-const createHypothesisConditionIsNominal = () => {
-    return $(`<form class='hypothesis_display_form'>
+const createHypothesisConditionIsNominal = (dv, iv) => {
+    const template = $(`<form class='hypothesis_display_form'>
                     <div class="form-group">
                         <label for='name' class='col-form-label'>Hypothesis:
                         <div class="form-inline">
@@ -94,8 +94,6 @@ const createHypothesisConditionIsNominal = () => {
                             <label class="dv-in-form"></label>
                             <label>in</label>
                             <select class="iv-group-custom-select-1">
-<!--                                <option value="CI" selected>CI</option>-->
-<!--                                <option value="PI">PI</option>-->
                             </select>
                             <label>group will be</label>
                             <select class="custom-select two-side">
@@ -106,16 +104,31 @@ const createHypothesisConditionIsNominal = () => {
                             </select>
                             <label>that in</label>
                             <select class="iv-group-custom-select-2">
-<!--                                <option value="CI" selected>CI</option>-->
-<!--                                <option value="PI">PI</option>-->
                             </select>
                         </div>
                     </div>
                 </form>`);
+
+    template.find(".dv-in-form").append(dv.name);
+    let categoryOptions = [];
+    let categoryOptions2 = [];
+    for(let i = 0; i < iv.categories.length; i++) {
+        const option = $(`<option value="${iv.categories[i]}">${iv.categories[i]}</option>`);
+        categoryOptions.push(option);
+        categoryOptions2.push(option.clone());
+    }
+
+    categoryOptions[0].prop("selected", true);
+    categoryOptions2[1].prop("selected", true);
+
+    template.find(".iv-group-custom-select-1").append(categoryOptions);
+    template.find(".iv-group-custom-select-2").append(categoryOptions2);
+
+    return template;
 }
 
-const createHypothesisConditionIsNotNominal = () => {
-    return $(`
+const createHypothesisConditionIsNotNominal = (dv, iv) => {
+    const template = $(`
                 <form class='hypothesis_display_form'>
                     <div class="form-group">
                         <label for='name' class='col-form-label'>Hypothesis:
@@ -133,7 +146,10 @@ const createHypothesisConditionIsNotNominal = () => {
                         </div>
                     </div>
                 </form>
-            `)
+            `);
+    template.find(".dv-in-form").append(dv.name);
+    template.find(".iv-in-form").append(iv.name);
+    return template;
 }
 
 //////////////  Add a bunch of cards //////////////

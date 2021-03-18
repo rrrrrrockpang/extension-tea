@@ -21,9 +21,9 @@ const TEXTAREA_NODES = [
     dependentVariableTextAreaNode,
     independentVariableTextAreaNode,
     analysisTextAreaNode,
-    exclusionTextAreaNode,
+    // exclusionTextAreaNode,
     sampleSizeTextAreaNode,
-    otherNodeTextArea
+    // otherNodeTextArea
 ];
 
 const HYPOTHESIS_ID = "hypothesis";
@@ -40,9 +40,9 @@ const IDS = [
     DV_ID,
     CONDITION_ID,
     ANALYSIS_ID,
-    OUTLIER_ID,
+    // OUTLIER_ID,
     SAMPLESIZE_ID,
-    OTHER_ID
+    // OTHER_ID
 ]
 
 analysisConditionClicked = false;

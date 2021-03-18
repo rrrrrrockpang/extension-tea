@@ -50,4 +50,11 @@
   max-width: 100%;
 }
 
+.dv-in-form, .iv-in-form {
+  border: solid;
+  border-color: #4cae4c;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
 /*# sourceMappingURL=plugin.css.map */
