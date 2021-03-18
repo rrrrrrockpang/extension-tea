@@ -59,45 +59,7 @@ const addSubmitButton = (id, playground) => {
 
     const initialBtn = createInitialButton(btn_id, btn_text);
     initialBtn.on("click", function() {
-        // let nameArea = inputFormArea.find(".variable-name").first();
-        // let typeArea = inputFormArea.find(".var-type input[type='radio']:checked");
-        // let categoriesArea = inputFormArea.find('.add-category .categories');
-        let variable;
-
-        if(id === DV_ID) {
-            // if(currentDV === null) {
-            //     variable = new Variable(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
-            // } else {
-            //     variable = currentDV;
-            // }
-            // variable.section = 'dependent';
-            variable = updateVariable(DV_ID, inputFormArea);
-            variableMap[variable.card_id] = variable;
-
-            dependent_variables.push(variable);
-            dvListener.dv = dependent_variables;
-        } else if(id === CONDITION_ID) {
-            variable = updateVariable(CONDITION_ID, inputFormArea);
-
-            // const new_card_id = id + "_" + nameArea.val();
-            // if(currentCondition === null) {
-            //     variable = new Variable(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
-            //     variable.section = 'condition';
-            //     variable.pos = conditions.length;
-            //     conditions.push(variable);
-            // } else {
-            //     variable = currentCondition;
-            //     variable.set(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
-            //     delete variableMap[id + "_" + currentCondition.name];
-            //     conditions[variable.pos] = variable;  // TODO: check reference
-            // }
-
-            variableMap[variable.card_id] = variable;
-            conditions.push(variable);
-            ivListener.iv = conditions;
-            console.log(conditions);
-        }
-
+        const variable = updateVariable(id, inputFormArea);
         clearInputFormArea(inputFormArea);
     })
     inputFormArea.append(initialBtn);
@@ -119,11 +81,11 @@ const handleCategoricalVariable = (id, inputFormTemplate) => {
         if(selected.val() === "nominal") {
             if(ordinalArea.is(":visible")) ordinalArea.hide();
             nominalArea.show();
-            handleCategoryBtn(nominalArea); // Manipulate Add category button
+            handleCategoryBtn(nominalArea.find(".add-category-btn")); // Manipulate Add category button
         } else if(selected.val() === "ordinal"){
             if(nominalArea.is(":visible")) nominalArea.hide();
             ordinalArea.show();
-            handleCategoryBtn(ordinalArea);
+            handleCategoryBtn(ordinalArea.find(".add-category-btn"));
         } else {
             nominalArea.hide();
             ordinalArea.hide();
@@ -131,24 +93,46 @@ const handleCategoricalVariable = (id, inputFormTemplate) => {
     });
 }
 
-const handleCategoryBtn = (categoryArea) => {
+// const handleCategoryBtn = (categoryArea) => {
+//     /**
+//      * categoryArea is the nominal or ordinal area
+//      */
+//     categoryArea.find(".add-category-btn").on('click', function() {
+//         let categories = getCurrentCategories(categoryArea);
+//         const newCategory = categoryArea.find(".input-category").val();
+//         categories.push(newCategory);
+//
+//         const card = createCategoryCard(newCategory);
+//         card.find(".delete-category").on("click", function() {
+//             const cardComponent = $(this).parent();
+//             const deletedCategory = cardComponent.find('.category-name').text();
+//             categories = deleteCategory(categories, deletedCategory);
+//             cardComponent.remove();
+//         });
+//         categoryArea.find(".input-category").val('');
+//         categoryArea.find(".categories").append(card);
+//     })
+// }
+const handleCategoryBtn = (categoryAreaBtn) => {
     /**
      * categoryArea is the nominal or ordinal area
      */
-    categoryArea.find(".add-category").on('click', function() {
+    const categoryArea = categoryAreaBtn.closest(".add-category");
+    categoryAreaBtn.on('click', function() {
         let categories = getCurrentCategories(categoryArea);
-        const newCategory = categoryArea.find("input[type=text]").val();
+        const newCategory = categoryArea.find(".input-category:visible").val();
+        if(newCategory.length === 0) return;
         categories.push(newCategory);
 
         const card = createCategoryCard(newCategory);
         card.find(".delete-category").on("click", function() {
             const cardComponent = $(this).parent();
-            const deletedCategory = cardComponent.find('.category-name').text();
+            const deletedCategory = cardComponent.find('.category-name:visible').text();
             categories = deleteCategory(categories, deletedCategory);
             cardComponent.remove();
         });
-        categoryArea.find(".input-category").val('');
-        categoryArea.find(".categories").append(card);
+        categoryArea.find(".input-category:visible").val('');
+        categoryArea.find(".categories:visible").append(card);
     })
 }
 

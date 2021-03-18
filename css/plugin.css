@@ -7,6 +7,8 @@
 .preregistea > .container {
   min-height: 100%;
   max-width: 100%;
+  min-width: 100%;
+  margin: 0;
 }
 
 .preregistea > .container > .row {
@@ -18,6 +20,22 @@
 .displayarea {
   border-right: solid 2px;
   border-color: #4cae4c;
+}
+
+.displayarea > .container {
+  min-height: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  margin: 0;
+}
+
+.variable-card > .container {
+  max-width: 100%;
+  min-width: 100%;
+  margin: 2px;
+  border: solid;
+  border-color: #4cae4c;
+  text-align: center;
 }
 
 .inputarea > .container {

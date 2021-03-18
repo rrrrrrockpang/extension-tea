@@ -70,7 +70,7 @@ const createCategoricalVariableInputFormArea = (text, className) => {
                             
                             <div class="form-inline">
                                 <input type='text' class='form-control input-category'>
-                                <button type="button" class="btn btn-success add-category">Add</button>
+                                <button type="button" class="btn btn-success add-category-btn">Add</button>
                             </div>
                         </div>
                         <div class="row categories"></div>
@@ -83,6 +83,57 @@ const createInitialButton = (id, text) => {
         .css({
             right: 0,
         })
+}
+
+const createHypothesisConditionIsNominal = () => {
+    return $(`<form class='hypothesis_display_form'>
+                    <div class="form-group">
+                        <label for='name' class='col-form-label'>Hypothesis:
+                        <div class="form-inline">
+                            <label>The mean value of</label>
+                            <label class="dv-in-form"></label>
+                            <label>in</label>
+                            <select class="iv-group-custom-select-1">
+<!--                                <option value="CI" selected>CI</option>-->
+<!--                                <option value="PI">PI</option>-->
+                            </select>
+                            <label>group will be</label>
+                            <select class="custom-select two-side">
+                                <option value="greater" selected>greater than</option>
+                                <option value="less">less than</option>
+                                <option value="different">different from</option>
+                                <option value="same">same as</option>
+                            </select>
+                            <label>that in</label>
+                            <select class="iv-group-custom-select-2">
+<!--                                <option value="CI" selected>CI</option>-->
+<!--                                <option value="PI">PI</option>-->
+                            </select>
+                        </div>
+                    </div>
+                </form>`);
+}
+
+const createHypothesisConditionIsNotNominal = () => {
+    return $(`
+                <form class='hypothesis_display_form'>
+                    <div class="form-group">
+                        <label for='name' class='col-form-label'>Hypothesis:
+                        <div class="form-inline" style="display: inline-block;">
+                            <label>The greater value of</label>
+                            <label class="iv-in-form mr-sm-2"></label>
+                            <label>will lead to</label>
+                            <select class="custom-select positive-negative">
+                                <option value="greater" selected>greater</option>
+                                <option value="less">less</option>
+                                <option value="different">different</option>
+                                <option value="same">the same</option>
+                            </select>
+                            <label class="dv-in-form"></label>
+                        </div>
+                    </div>
+                </form>
+            `)
 }
 
 //////////////  Add a bunch of cards //////////////

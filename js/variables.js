@@ -1,11 +1,12 @@
 let dependent_variables = [];
 let conditions = [];
 let suggested = [];
-let dvMap = new Map();
-let ivMap = new Map();
 let variableMap = {};
-let currentCondition = null;
-let currentDV = null;
+let hypothesisPair = {
+    dv: '',
+    iv: ''
+};
+
 
 const hypothesisTextAreaNode = $("[name='text1']");
 const dependentVariableTextAreaNode = $("[name='text2']");
@@ -44,6 +45,13 @@ const IDS = [
     OTHER_ID
 ]
 
+analysisConditionClicked = false;
+analysisCondition = null;
+analysisConditionElement = null;
+
+analysisDVClicked = false;
+analysisDV = null;
+analysisDVElement = null;
 
 class Variable {
     constructor(name, type='', categories=[]) {
