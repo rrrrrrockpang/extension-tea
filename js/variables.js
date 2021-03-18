@@ -3,6 +3,9 @@ let conditions = [];
 let suggested = [];
 let dvMap = new Map();
 let ivMap = new Map();
+let variableMap = {};
+let currentCondition = null;
+let currentDV = null;
 
 const hypothesisTextAreaNode = $("[name='text1']");
 const dependentVariableTextAreaNode = $("[name='text2']");
@@ -47,11 +50,16 @@ class Variable {
         this.name = name;
         this.type = type;
         this.categories = categories;
+        this.isEditing = false;
     }
 
     set(name, type, categories=[]) {
         this.name = name;
         this.type = type;
         this.categories = categories;
+    }
+
+    isEditing() {
+        this.isEditing = true;
     }
 }

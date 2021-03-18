@@ -28,10 +28,10 @@
         "lib/d3.min.js",
         "lib/bootstrap.min.js",
         "js/form.js",
-        "js/handle.js",
         "js/variables.js",
         "js/card.js",
         "js/layout.js",
+        "js/handle.js",
         "js/utils.js",
         "js/content.js",
         "js/api.js"

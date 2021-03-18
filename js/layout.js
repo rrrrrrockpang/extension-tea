@@ -8,7 +8,7 @@ const addPreregistea = (id, rowElement) => {
     // form.css('height', height);  // TODO: Figure out the best height
 
     addDisplayArea(id, preregistea);
-    addInputArea(id, preregistea);
+    addInputArea(id, preregistea.find('.inputarea'));
 
     return preregistea;
 }
@@ -24,7 +24,11 @@ const addDisplayArea = (id, playground) => {
 
 const addInputArea = (id, playground) => {
     const form_id = id + '_form';
-    let inputFormArea = playground.find('.inputarea');
+    playground.append(addInputForm(id, form_id));
+    addSubmitButton(id, playground);
+}
+
+const addInputForm = (id, form_id) => {
     let inputForm;
     if(id === CONDITION_ID || id === DV_ID) {
         inputForm = createVariableForm(form_id);
@@ -33,8 +37,7 @@ const addInputArea = (id, playground) => {
         }
         handleCategoricalVariable(form_id, inputForm);
     }
-    inputFormArea.append(inputForm);
-    addSubmitButton(id, inputFormArea);
+    return inputForm;
 }
 
 const addSubmitButton = (id, playground) => {
@@ -56,14 +59,46 @@ const addSubmitButton = (id, playground) => {
 
     const initialBtn = createInitialButton(btn_id, btn_text);
     initialBtn.on("click", function() {
+        // let nameArea = inputFormArea.find(".variable-name").first();
+        // let typeArea = inputFormArea.find(".var-type input[type='radio']:checked");
+        // let categoriesArea = inputFormArea.find('.add-category .categories');
+        let variable;
+
         if(id === DV_ID) {
-            dependent_variables.push(new Variable("hi"));
+            // if(currentDV === null) {
+            //     variable = new Variable(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
+            // } else {
+            //     variable = currentDV;
+            // }
+            // variable.section = 'dependent';
+            variable = updateVariable(DV_ID, inputFormArea);
+            variableMap[variable.card_id] = variable;
+
+            dependent_variables.push(variable);
             dvListener.dv = dependent_variables;
         } else if(id === CONDITION_ID) {
-            conditions.push(new Variable("jjj"));
-            console.log(conditions)
+            variable = updateVariable(CONDITION_ID, inputFormArea);
+
+            // const new_card_id = id + "_" + nameArea.val();
+            // if(currentCondition === null) {
+            //     variable = new Variable(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
+            //     variable.section = 'condition';
+            //     variable.pos = conditions.length;
+            //     conditions.push(variable);
+            // } else {
+            //     variable = currentCondition;
+            //     variable.set(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
+            //     delete variableMap[id + "_" + currentCondition.name];
+            //     conditions[variable.pos] = variable;  // TODO: check reference
+            // }
+
+            variableMap[variable.card_id] = variable;
+            conditions.push(variable);
             ivListener.iv = conditions;
+            console.log(conditions);
         }
+
+        clearInputFormArea(inputFormArea);
     })
     inputFormArea.append(initialBtn);
 }
@@ -133,4 +168,15 @@ const getCurrentCategories = (categoryArea) => {
         if($(this).is(":visible")) categories.push($(this).text());
     })
     return categories;
+}
+
+const clearInputFormArea = (inputForm) => {
+    let nameArea = inputForm.find(".variable-name").first();
+    let typeArea = inputForm.find(".var-type input[type='radio']:checked");
+    let categoriesArea = inputForm.find('.add-category .categories');
+
+    nameArea.val("");
+    typeArea.prop("checked", false);
+    categoriesArea.empty();
+    categoriesArea.parent().parent().hide();
 }
