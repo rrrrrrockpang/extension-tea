@@ -27,6 +27,7 @@
         "lib/jquery-3.5.1.min.js",
         "lib/d3.min.js",
         "lib/bootstrap.min.js",
+        "js/api.js",
         "js/form.js",
         "js/variables.js",
         "js/card.js",
@@ -34,7 +35,7 @@
         "js/handle.js",
         "js/utils.js",
         "js/content.js",
-        "js/api.js"
+        "js/power.js"
       ]
     }
   ],

@@ -17,7 +17,7 @@
   margin-bottom: 0 !important;
 }
 
-.displayarea {
+.inputarea {
   border-right: solid 2px;
   border-color: #4cae4c;
 }
@@ -55,6 +55,32 @@
   border-color: #4cae4c;
   padding-left: 3px;
   padding-right: 3px;
+}
+
+.floating-btn {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  background-color: #0C9;
+  color: #FFF;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+}
+
+#method-floating-btn {
+  right: 40px;
+}
+
+#tea-floating-btn {
+  right: 100px;
+}
+
+#sample-size-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }
 
 /*# sourceMappingURL=plugin.css.map */

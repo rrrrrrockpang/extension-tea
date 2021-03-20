@@ -3,8 +3,8 @@ const createPreregisteaForm = (id) => {
                 <div class="preregistea h-100 w-100">
                     <div class='container'>
                         <div class="row h-100">
-                            <div class="col-xs-8 displayarea"></div>
                             <div class="col-xs-4 inputarea"></div>
+                            <div class="col-xs-8 displayarea"></div>
                         </div>
                     </div>
                 </div>

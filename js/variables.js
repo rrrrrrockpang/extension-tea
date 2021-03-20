@@ -7,6 +7,16 @@ let hypothesisPair = {
     iv: ''
 };
 
+let teaCode = {
+    "variables": [],
+    "study_design": {
+        "study type": "experiment",
+        "independent variables": [],
+        "dependent variables":[]
+    },
+    "hypothesis": []
+};
+
 
 const hypothesisTextAreaNode = $("[name='text1']");
 const dependentVariableTextAreaNode = $("[name='text2']");
@@ -17,12 +27,12 @@ const sampleSizeTextAreaNode = $("[name='text6']");
 const otherNodeTextArea = $("[name='text7']");
 
 const TEXTAREA_NODES = [
-    hypothesisTextAreaNode,
+    // hypothesisTextAreaNode,
     dependentVariableTextAreaNode,
     independentVariableTextAreaNode,
     analysisTextAreaNode,
     // exclusionTextAreaNode,
-    sampleSizeTextAreaNode,
+    // sampleSizeTextAreaNode,
     // otherNodeTextArea
 ];
 
@@ -36,7 +46,7 @@ const OTHER_ID = "other";
 
 
 const IDS = [
-    HYPOTHESIS_ID,
+    // HYPOTHESIS_ID,
     DV_ID,
     CONDITION_ID,
     ANALYSIS_ID,

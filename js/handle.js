@@ -52,6 +52,7 @@ const handleVariableListeners = () => {
         sections[DV_ID] = $(`#${DV_ID}_preregistea .displayarea`);
         sections[ANALYSIS_ID] = $(`#${ANALYSIS_ID}_preregistea .displayarea .hypothesis-dv`)
         populateCards(DV_ID, sections, dvs); // In relevant sections
+        updateTeaCodeVariables();
     });
 
     ivListener.registerListener(function (conditions) {
@@ -61,6 +62,7 @@ const handleVariableListeners = () => {
         sections[CONDITION_ID] = $(`#condition_preregistea .displayarea`);
         sections[ANALYSIS_ID] = $(`#analysis_preregistea .displayarea .hypothesis-iv`);
         populateCards(CONDITION_ID, sections, conditions);
+        updateTeaCodeVariables();
     });
 
     hypothesisPairListener.registerListener(function(pair) {
@@ -73,6 +75,22 @@ const handleVariableListeners = () => {
             inputArea.append("Please add some value here");
         }
     })
+}
+
+const updateVariableLst = (dvOrIv, variableTea, studyDesignVar) => {
+    for (let i = 0; i < dvOrIv.length; i++) {
+        const di = dvOrIv[i];
+        let variable = {
+            "name": di.name,
+            "data type": di.type,
+        };
+
+        if (di.type === "nominal") {
+            variable["categories"] = di.categories;
+        }
+        variableTea.push(variable);
+        studyDesignVar.push(di.name);
+    }
 }
 
 const updateHypothesisFormArea = (hypothesisPair, inputArea) => {
@@ -94,8 +112,8 @@ const updateHypothesisFormArea = (hypothesisPair, inputArea) => {
                 two_side = true;
             }
 
-            let cat1 = hypothesisFormArea.find('.iv-group-custom-select-1:selected').val();
-            let cat2 = hypothesisFormArea.find('.iv-group-custom-select-2:selected').val();
+            let cat1 = $(`.iv-group-custom-select-1 option:selected`).val();
+            let cat2 = $('.iv-group-custom-select-2 option:selected').val();
             if(selected === 'less') {
                 let temp = cat2;
                 cat2 = cat1;
@@ -108,14 +126,14 @@ const updateHypothesisFormArea = (hypothesisPair, inputArea) => {
             }
         } else {
             let positive = false;
-            let posNeg = hypothesisFormArea.find('.positive-negative:selected').val();
+            let posNeg = $('.positive-negative option:selected').val();
             if(posNeg) positive = true;
             relationship = {
                 'condition_type' : conditionType,
                 'positive': positive
             }
         }
-        teaAPI(iv, dv, relationship);
+        updateTeaCodeHypothesis(iv, dv, relationship);
     })
     inputArea.append(hypothesisFormArea);
     inputArea.append(apiBtn);

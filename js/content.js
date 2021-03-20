@@ -11,6 +11,11 @@ $(document).ready(function() {
         row.prepend(addPreregistea(id, row));
     }
 
-    // Handle the input interaction
-    // First handle the variables
+    // Deal with power analysis
+    sampleSizeTextAreaNode.parent().append(addPowerAnalysisBtn());
+
+    // Add floating button
+    addTeaModal($("body"));
+    $(".center1").append(addTeaFloatingBtn());
+    $(".center1").append(addMethodFloatingBtn());
 });
