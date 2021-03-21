@@ -7,6 +7,11 @@ let hypothesisPair = {
     iv: ''
 };
 
+let constructs = [];
+let constructMap = {};
+let constructMeasureMap = {};
+let tempConstruct = null;
+
 let teaCode = {
     "variables": [],
     "study_design": {
@@ -27,7 +32,7 @@ const sampleSizeTextAreaNode = $("[name='text6']");
 const otherNodeTextArea = $("[name='text7']");
 
 const TEXTAREA_NODES = [
-    // hypothesisTextAreaNode,
+    hypothesisTextAreaNode,
     dependentVariableTextAreaNode,
     independentVariableTextAreaNode,
     analysisTextAreaNode,
@@ -46,7 +51,7 @@ const OTHER_ID = "other";
 
 
 const IDS = [
-    // HYPOTHESIS_ID,
+    HYPOTHESIS_ID,
     DV_ID,
     CONDITION_ID,
     ANALYSIS_ID,
@@ -62,6 +67,10 @@ analysisConditionElement = null;
 analysisDVClicked = false;
 analysisDV = null;
 analysisDVElement = null;
+
+constructClicked = false;
+constructObject = null;
+constructElement = null;
 
 class Variable {
     constructor(name, type='', categories=[]) {
@@ -79,5 +88,31 @@ class Variable {
 
     isEditing() {
         this.isEditing = true;
+    }
+
+    addConstruct(construct) {
+        this.construct = construct;
+    }
+}
+
+class Construct {
+    constructor(construct, measure) {
+        this.construct = construct;
+        this.measure = measure;
+        this.isEditing = false;
+        this.selected = false;
+    }
+
+    set(construct, measure) {
+        this.construct = construct;
+        this.measure = measure;
+    }
+
+    isEditing() {
+        this.isEditing = true;
+    }
+
+    addMeasure(measure) {
+        this.measure = measure;
     }
 }

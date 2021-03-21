@@ -14,6 +14,7 @@ $(document).ready(function() {
     // Deal with power analysis
     sampleSizeTextAreaNode.parent().append(addPowerAnalysisBtn());
 
+
     // Add floating button
     addTeaModal($("body"));
     $(".center1").append(addTeaFloatingBtn());

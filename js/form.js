@@ -2,7 +2,8 @@ const createPreregisteaForm = (id) => {
     return $(`<div class="col-xs-12" id="${id}" style="display: flex; flex-direction: column">
                 <div class="preregistea h-100 w-100">
                     <div class='container'>
-                        <div class="row h-100">
+                        <div class="row h-100 description">I'm describing</div>
+                        <div class="row h-100" style="border-top: 2px solid">
                             <div class="col-xs-4 inputarea"></div>
                             <div class="col-xs-8 displayarea"></div>
                         </div>
@@ -22,6 +23,23 @@ const createAnalysisTwoColumnsForm = () => {
             </div>`);
 }
 
+const createConstructForm = () => {
+    return $(`<div class="container" style="min-height: 80%">
+                    <form class='inputarea-form'>
+                        <div class="form-group">
+                            <label for='name' class='col-form-label'>Construct:
+                            <input type='text' class='form-control construct'>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for='name' class='col-form-label'>Measure:
+                            <input type='text' class='form-control measure'>
+                            </label>
+                        </div>
+                    </form>
+              </div>`);
+}
+
 const createVariableForm = (id) => {
     return $(`
             <div class="container" style="min-height: 80%">
@@ -36,6 +54,10 @@ const createVariableForm = (id) => {
                         <label class="radio control-label">Variable Type:</label>
     
                         <div class="form-inline type-radio">
+                        
+                            <label class='form-check-label' for='nominalRadio'><input class='form-check-input' type='radio' name='variableTypeRadios' value='nominal'>
+                                Nominal
+                            </label>
                             <label class='form-check-label' for='ordinalRadio'>
                                 <input class='form-check-input' type='radio' name='variableTypeRadios' value='ordinal'>
                                 Ordinal
@@ -50,16 +72,16 @@ const createVariableForm = (id) => {
                             </label>
                         </div>
                     </div>
+                              
+                    <div>
+                        <div class="form-group construct-group"> 
+                              <label class="radio control-label construct-label">Construct:</label>
+                              <div class="construct-card"></div>
+                        </div>
+                    </div>
                 </form>  
             </div>  
     `);
-}
-
-const createNominalRadioBtn = () => {
-    return $(`<label class='form-check-label' for='nominalRadio'>
-                <input class='form-check-input' type='radio' name='variableTypeRadios' value='nominal'>
-                Nominal
-              </label>`);
 }
 
 const createCategoricalVariableInputFormArea = (text, className) => {
@@ -76,6 +98,22 @@ const createCategoricalVariableInputFormArea = (text, className) => {
                         <div class="row categories"></div>
                     </div>
                 </div>`);
+}
+
+const createStudyDesignRadioArea = () => {
+    return $(`
+        <div class="form-group study-design">
+            <label class="radio control-label">Study Design:</label>
+            <label class='form-check-label' for='withinSubject'>
+                    <input class='form-check-input' type='radio' name='studyDesignRadio' value='within'>
+                    Within-Subject
+            </label>
+            <label class='form-check-label' for='withinSubject'>
+                <input class='form-check-input' type='radio' name='studyDesignRadio' value='between'>
+                Between-Subject
+            </label>
+        </div>
+    `)
 }
 
 const createInitialButton = (id, text) => {
@@ -166,6 +204,46 @@ const addCard = (text, id) => {
                     </div>
                 </div>
             </div>
+        </div>
+    `);
+}
+
+const addNewCard = (section_id, variable) => {
+    let card = $(`
+            <div class="uml-card" id="${variable.name}" style="width: 200px; height: 150px; position: relative">
+                <div class="form-group mb-1" style="border-bottom: 1px solid #0f0f0f; text-align: center">
+                    <label class="card-header-name"></label>
+                </div>
+            </div>
+        `);
+
+    if(section_id === DV_ID || section_id === CONDITION_ID) {
+        card.find(".card-header-name").append(`<p>${variable.name}</p>`);
+        let lst = [addRowInCard("Type", variable.type)];
+        if(variable.categories.length > 0) {
+            lst.push(addRowInCard("Categories", variable.categories.toString()));
+        }
+
+        if(typeof variable.construct !== "undefined") {
+            lst.push(addRowInCard("Construct", variable.construct));
+        }
+
+        card.append(lst);
+    } else if(section_id === HYPOTHESIS_ID) {
+        card.find(".card-header-name").text(variable.name);
+        card.append(addRowInCard("Measure", variable.measure));
+    }
+
+    const cancel = $(`<button type='button' class='delete close' data-dismiss='alert' aria-label='Close' style="position: absolute; top: 0; right: 0">×</button>`)
+    card.append(cancel)
+
+    return card;
+}
+
+const addRowInCard = (name, text) => {
+    return $(`
+        <div class="form-group mb-0 card-details">
+             <label>${name}: ${text}</label>
         </div>
     `);
 }

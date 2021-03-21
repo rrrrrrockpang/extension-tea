@@ -2,6 +2,10 @@
   height: 100%;
   width: 100%;
   border: solid;
+  border-width: 1px;
+  border-radius: 1px;
+  border-color: #cccccc;
+  box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset;
 }
 
 .preregistea > .container {
@@ -22,7 +26,13 @@
   border-color: #4cae4c;
 }
 
-.displayarea > .container {
+.displayarea {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#analysis_preregistea .displayarea > .container {
   min-height: 100%;
   max-width: 100%;
   min-width: 100%;
@@ -81,6 +91,15 @@
   position: absolute;
   bottom: 20px;
   right: 20px;
+}
+
+.uml-card {
+  border: 1px solid black;
+}
+
+.card-details {
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 /*# sourceMappingURL=plugin.css.map */

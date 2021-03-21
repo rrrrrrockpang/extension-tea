@@ -9,7 +9,6 @@ const addPreregistea = (id, rowElement) => {
     addDisplayArea(id, preregistea);
     addInputArea(id, preregistea.find('.inputarea'));
 
-
     return preregistea;
 }
 
@@ -26,16 +25,16 @@ const addInputArea = (id, playground) => {
     const form_id = id + '_form';
     playground.append(addInputForm(id, form_id));
     addSubmitButton(id, playground);
+    $(".construct-group").hide();
 }
 
 const addInputForm = (id, form_id) => {
     let inputForm;
     if(id === CONDITION_ID || id === DV_ID) {
         inputForm = createVariableForm(form_id);
-        if(id === CONDITION_ID) {
-            inputForm.find(".form-inline.type-radio").prepend(createNominalRadioBtn())
-        }
-        handleCategoricalVariable(form_id, inputForm);
+        handleCategoricalVariable(id, inputForm);
+    } else if(id === HYPOTHESIS_ID) {
+        inputForm = createConstructForm();
     }
     return inputForm;
 }
@@ -45,30 +44,29 @@ const addSubmitButton = (id, playground) => {
     const btn_id = id + "_initial_btn";
     let btn_text;
 
-    if(id === DV_ID) {
-        btn_text = "Add a Variable";
-    } else if (id === CONDITION_ID) {
-        btn_text = "Add a Variable";
-    } else if (id === HYPOTHESIS_ID) {
-        btn_text = "Define a construct";
-    } else if (id === ANALYSIS_ID) {
-        btn_text = "Find the right statistical test with Tea";
-    } else if(id === SAMPLESIZE_ID) {
-        btn_text = "Determine Sample Size";
+    if(id === DV_ID || id === CONDITION_ID) {
+        btn_text = "Add Variable";
+        const initialBtn = createInitialButton(btn_id, btn_text);
+        initialBtn.on("click", function () {
+            const variable = updateVariable(id, inputFormArea);
+            clearInputFormArea(inputFormArea);
+        })
+        inputFormArea.append(initialBtn);
+    } else if(id === HYPOTHESIS_ID) {
+        btn_text = "Add Construct";
+        const initialBtn = createInitialButton(btn_id, btn_text);
+        initialBtn.on("click", function() {
+            updateConstruct(id, inputFormArea);
+            clearConstructInputFormArea(inputFormArea);
+        })
+        inputFormArea.append(initialBtn);
     }
-
-    const initialBtn = createInitialButton(btn_id, btn_text);
-    initialBtn.on("click", function() {
-        const variable = updateVariable(id, inputFormArea);
-        clearInputFormArea(inputFormArea);
-    })
-    inputFormArea.append(initialBtn);
 }
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////   Handle all the static js interaction   //////////////////
 ////////////////////////////////////////////////////////////////////////////
-const handleCategoricalVariable = (id, inputFormTemplate) => {
+const handleCategoricalVariable = (area_id, inputFormTemplate) => {
     // Add the nominal and ordinal form
     addCategoricalForm(inputFormTemplate);
 
@@ -77,10 +75,12 @@ const handleCategoricalVariable = (id, inputFormTemplate) => {
         const selected = inputFormTemplate.find("input[type='radio']:checked");
         let nominalArea = inputFormTemplate.find(".nominal-category");
         let ordinalArea = inputFormTemplate.find(".ordinal-category");
+        let studyDesignArea = inputFormTemplate.find(".study-design");
 
         if(selected.val() === "nominal") {
             if(ordinalArea.is(":visible")) ordinalArea.hide();
             nominalArea.show();
+            if(area_id === CONDITION_ID) studyDesignArea.show();
             handleCategoryBtn(nominalArea.find(".add-category-btn")); // Manipulate Add category button
         } else if(selected.val() === "ordinal"){
             if(nominalArea.is(":visible")) nominalArea.hide();
@@ -140,8 +140,11 @@ const handleCategoryBtn = (categoryAreaBtn) => {
 const addCategoricalForm = (inputFormTemplate) => {
     const nominalArea = createCategoricalVariableInputFormArea("Categories", "nominal-category")
     const ordinalArea = createCategoricalVariableInputFormArea("Orders", "ordinal-category")
+    const studyDesign = createStudyDesignRadioArea();
+    studyDesign.insertAfter(inputFormTemplate.find(".var-type"));
     nominalArea.insertAfter(inputFormTemplate.find(".var-type"));
     ordinalArea.insertAfter(inputFormTemplate.find(".var-type"));
+    studyDesign.hide();
     nominalArea.hide();
     ordinalArea.hide();
 }
@@ -163,6 +166,14 @@ const clearInputFormArea = (inputForm) => {
     typeArea.prop("checked", false);
     categoriesArea.empty();
     categoriesArea.parent().parent().hide();
+}
+
+const clearConstructInputFormArea = (inputForm) => {
+    let constructArea = inputForm.find(".construct");
+    let measureArea = inputForm.find(".measure");
+
+    constructArea.val("");
+    measureArea.val("");
 }
 
 

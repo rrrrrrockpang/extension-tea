@@ -1,4 +1,19 @@
 const handleVariableListeners = () => {
+    cListener = {
+        cInternal: constructs,
+        cListener: function(val) {},
+        set c(val) {
+            this.cInternal = val;
+            this.cListener(val);
+        },
+        get c() {
+            return this.cInternal;
+        },
+        registerListener: function(listener) {
+            this.cListener = listener
+        }
+    }
+
     dvListener = {
         dvInternal: dependent_variables,
         dvListener: function (val) {},
@@ -43,6 +58,49 @@ const handleVariableListeners = () => {
             this.pListener = listener;
         }
     }
+
+    cListener.registerListener(function(constructs) {
+        $(`#${HYPOTHESIS_ID}_preregistea .displayarea`).empty();
+
+        let sections = {};
+        sections[HYPOTHESIS_ID] = $(`#${HYPOTHESIS_ID}_preregistea .displayarea`);
+        populateCards(HYPOTHESIS_ID, sections, constructs);
+
+        let options = [];
+        for(let i = 0; i < constructs.length; i++) {
+            const c = constructs[i];
+            if (!c.selected) {
+                const optionCard = $(`<div class="construct-card" style="border: solid"><span>${c.construct}</span></div>`);
+                optionCard.on("click", function () {
+                    $(this).css("background", "grey");
+
+                    if (constructClicked) {
+                        constructElement.css("background", "none");
+                        if (constructObject.construct === c.construct) {
+                            constructClicked = false;
+                            constructElement = null;
+                            constructObject = null;
+                        } else {
+                            constructClicked = true;
+                            constructElement = $(this);
+                            constructObject = c;
+                        }
+                    } else {
+                        constructClicked = true;
+                        constructElement = $(this);
+                        constructObject = c;
+                    }
+                });
+                options.push(optionCard);
+            }
+        }
+
+        $(".construct-card").html(options);
+
+        if(constructs.length <= 0) $(".construct-group").hide();
+        else $(".construct-group").show();
+        //TODO: updateTeaCodeVariables();
+    })
 
     dvListener.registerListener(function (dvs) {
         $(".hypothesis-dv").empty();
@@ -139,6 +197,28 @@ const updateHypothesisFormArea = (hypothesisPair, inputArea) => {
     inputArea.append(apiBtn);
 }
 
+const updateConstruct = (section_id, inputForm, construct = null) => {
+    let constructArea = inputForm.find(".construct");
+    let measureArea = inputForm.find(".measure");
+
+    if(construct === null) {
+        construct = new Construct(constructArea.val(), measureArea.val());
+        construct.section = section_id;
+        construct.card_id = section_id + "_" + construct.construct;
+    } else {
+        construct.set(constructArea.val(), measureArea.val());
+    }
+
+    console.log(construct);
+
+    constructMap[construct.card_id] = construct;
+    constructMeasureMap[construct.construct] = construct.measure;
+    constructs.push(construct);
+    if(!construct.isEditing) cListener.c = constructs;
+
+    return construct;
+}
+
 const updateVariable = (section_id, inputForm, variable = null) => {
     let initial = variable;
     let nameArea = inputForm.find(".variable-name").first();
@@ -148,9 +228,14 @@ const updateVariable = (section_id, inputForm, variable = null) => {
     if(variable === null) {
         variable = new Variable(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
         variable.section = section_id;
+        variable.construct = constructObject.construct;  // TODO: Avoid null pointer
         variable.card_id = section_id + "_" + variable.name;
+        constructObject.selected = true;
+        cListener.c = constructs;
     } else {
         variable.set(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
+        if(typeof variable.construct === "undefined" || variable.construct === null)
+            variable.construct = tempConstruct;
     }
 
 
@@ -164,15 +249,13 @@ const updateVariable = (section_id, inputForm, variable = null) => {
         if(!variable.isEditing) ivListener.iv = conditions;
     }
 
-    console.log(variableMap);
-    console.log(variable);
-
     return variable;
 }
 
 const deleteVariable = (section_id, inputForm, variable) => {
-    delete variableMap[variable.card_id];
     if(section_id === DV_ID) {
+        delete variableMap[variable.card_id];
+
         let pos = 0;
         for(let i = 0; i < dependent_variables.length; i++) {
             if(variable.name === dependent_variables[i].name) {
@@ -181,8 +264,10 @@ const deleteVariable = (section_id, inputForm, variable) => {
             }
         }
         dependent_variables.splice(pos, 1);
+        dvListener.dv = dependent_variables;
     } else if(section_id === CONDITION_ID) {
-        alert("?");
+        delete variableMap[variable.card_id];
+
         let pos = 0;
         for(let i = 0; i < conditions.length; i++) {
             if(variable.name === conditions[i].name) {
@@ -191,11 +276,21 @@ const deleteVariable = (section_id, inputForm, variable) => {
             }
         }
         conditions.splice(pos, 1);
-    }//
+        ivListener.iv = conditions;
+    } else if(section_id === HYPOTHESIS_ID) {
+        delete constructMap[variable.card_id];
 
-    console.log(dependent_variables);
-    console.log("??")
-    console.log(conditions);
+        let pos = 0;
+        for(let i = 0; i < constructs.length; i++) {
+            if(variable.name === constructs[i].name) {
+                pos = i;
+                break
+            }
+        }
+        constructs.splice(pos, 1);
+        cListener.c = constructs;
+    }
+
     inputForm.find(variable.card_id).remove();
 }
 
@@ -212,8 +307,8 @@ const populateCards = (section_id, object, variables) => {
                 card.on("click", function() {
                     addListenertoHypothesisCard(card, variable);
                 });
-            } else {
-                card = addCard(variable.name, section_id + "_" + variable.name);
+            } else if(section_id === CONDITION_ID || section_id === DV_ID) {
+                card = addNewCard(section_id, variable);
                 card.find(".delete").on("click", function(){
                     console.log("variable deleted");
                     deleteVariable(section_id, element, variableMap[section_id + "_" + variable.name]);
@@ -228,7 +323,22 @@ const populateCards = (section_id, object, variables) => {
                     content: function() {
                         return popoverForm(card, section_id, variable);
                     }
-                })
+                });
+            } else if(section_id === HYPOTHESIS_ID) {
+                card = addCard(variable.construct, section_id + "_" + variable.construct);
+                card.find(".delete").on("click", function() {
+                    console.log("construct deleted");
+                    deleteVariable(section_id, element, constructMap[section_id + "_" + variable.construct]);
+                    card.remove();
+                });
+                card.popover({
+                    html: true,
+                    sanitize: false,
+                    container: 'body',
+                    placement: 'right',
+                    title: " ",
+                    content: function() { return $(`<div>${variable.construct}</div>`)} // TODO: change this;
+                });
             }
             cards.push(card);
         }
