@@ -224,8 +224,12 @@ const addNewCard = (section_id, variable) => {
             lst.push(addRowInCard("Categories", variable.categories.toString()));
         }
 
-        if(typeof variable.construct !== "undefined") {
+        if(variable.construct !== null) {
             lst.push(addRowInCard("Construct", variable.construct));
+        }
+
+        if(variable.study_design !== "") {
+            lst.push(addRowInCard("Study Design", variable.study_design + " subject factor"));
         }
 
         card.append(lst);
@@ -241,6 +245,7 @@ const addNewCard = (section_id, variable) => {
 }
 
 const addRowInCard = (name, text) => {
+    text = text.charAt(0).toUpperCase() + text.slice(1);
     return $(`
         <div class="form-group mb-0 card-details">
              <label>${name}: ${text}</label>

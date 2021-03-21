@@ -224,18 +224,23 @@ const updateVariable = (section_id, inputForm, variable = null) => {
     let nameArea = inputForm.find(".variable-name").first();
     let typeArea = inputForm.find(".var-type input[type='radio']:checked");
     let categoriesArea = inputForm.find('.add-category .categories');
+    let studyDesignArea = inputForm.find(".study-design input[type='radio']:checked");
+    console.log(studyDesignArea.val())
 
     if(variable === null) {
         variable = new Variable(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
         variable.section = section_id;
-        variable.construct = constructObject.construct;  // TODO: Avoid null pointer
+        variable.construct = constructObject;  // TODO: Avoid null pointer; this is probably a bug
         variable.card_id = section_id + "_" + variable.name;
-        constructObject.selected = true;
+        variable.study_design = studyDesignArea.val();
+        if(constructObject)
+            constructObject.selected = true;
         cListener.c = constructs;
     } else {
         variable.set(nameArea.val(), typeArea.val(), getCurrentCategories(categoriesArea));
         if(typeof variable.construct === "undefined" || variable.construct === null)
-            variable.construct = tempConstruct;
+            variable.construct = constructObject; // This is probably a bug too
+        variable.study_design = studyDesignArea.val();
     }
 
 
@@ -248,6 +253,9 @@ const updateVariable = (section_id, inputForm, variable = null) => {
         conditions.push(variable);
         if(!variable.isEditing) ivListener.iv = conditions;
     }
+
+    console.log("bvariable")
+    console.log(variable)
 
     return variable;
 }

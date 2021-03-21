@@ -78,6 +78,8 @@ class Variable {
         this.type = type;
         this.categories = categories;
         this.isEditing = false;
+        this.study_design = "";
+        this.construct = null;
     }
 
     set(name, type, categories=[]) {
