@@ -37,7 +37,7 @@ const TEXTAREA_NODES = [
     independentVariableTextAreaNode,
     analysisTextAreaNode,
     // exclusionTextAreaNode,
-    // sampleSizeTextAreaNode,
+    sampleSizeTextAreaNode,
     // otherNodeTextArea
 ];
 
