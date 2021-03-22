@@ -6,8 +6,8 @@ const addPreregistea = (id, rowElement) => {
     const preregistea = createPreregisteaForm(display_id);
     // const height = rowElement.find('textarea').height();
     // form.css('height', height);  // TODO: Figure out the best height
-    addDisplayArea(id, preregistea);
     addInputArea(id, preregistea.find('.inputarea'));
+    addDisplayArea(id, preregistea);
 
     return preregistea;
 }
@@ -17,9 +17,10 @@ const addDisplayArea = (id, playground) => {
 
     if(id === ANALYSIS_ID) {
         preregistea.append(createAnalysisTwoColumnsForm());
-    } else if(id === SAMPLESIZE_ID) {
-        preregistea.append(createPowerChart());
     }
+    // else if(id === SAMPLESIZE_ID) {
+    //     preregistea.append(createPowerChart());
+    // }
 
 }
 
@@ -37,9 +38,10 @@ const addInputForm = (id, form_id) => {
         handleCategoricalVariable(id, inputForm);
     } else if(id === HYPOTHESIS_ID) {
         inputForm = createConstructForm();
-    } else if(id === SAMPLESIZE_ID) {
-        inputForm = createPowerInputForm();
     }
+    // else if(id === SAMPLESIZE_ID) {
+    //     inputForm = createPowerInputForm();
+    // }
     return inputForm;
 }
 
@@ -54,6 +56,7 @@ const addSubmitButton = (id, playground) => {
         initialBtn.on("click", function () {
             const variable = updateVariable(id, inputFormArea);
             clearInputFormArea(inputFormArea);
+            updateDependentVariableContent(id);
         })
         inputFormArea.append(initialBtn);
     } else if(id === HYPOTHESIS_ID) {

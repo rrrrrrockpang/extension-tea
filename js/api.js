@@ -39,7 +39,25 @@ const updateTeaCodeHypothesis = (iv, dv, relationship) => {
 }
 
 const stringifyTeaCode = () => {
-    let string = JSON.stringify(teaCode, null, '\t');
+    let finalString = "";
+    const v = teaCode["variables"];
+    const vString = `variables = ${JSON.stringify(v, null, '\t')}\n`
+    finalString += vString + `tea.define_variables(variables)\n\n`;
+
+    const s = teaCode["study_design"];
+    const sString = `study = ${JSON.stringify(s, null, '\t')} \n`
+    finalString += sString + `tea.define_study_design(study_design) \n\n`
+
+    const hs = teaCode["hypothesis"];
+    let hString = "";
+    for(let i = 0; i < hs.length; i++) {
+        const h = hs[i];
+        hString += `tea.hypothesize(${JSON.stringify(h[0])}, ${JSON.stringify(h[1])}) \n`
+    }
+
+    finalString += hString + "\n";
+
+    return finalString// let string = JSON.stringify(teaCode, null, '\t');
     // String.prototype.replaceAt = function(index, replacement) {
     //     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
     // }
