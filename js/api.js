@@ -21,11 +21,13 @@ const updateTeaCodeHypothesis = (iv, dv, relationship) => {
 
     hypothesis.push([iv.name, dv.name]);
 
-    if(condition_type === "nominal") {
-        if(two_side) {
+    if(condition_type === "nominal" || condition_type === "ordinal") {
+        if(two_side === true) {
             hypothesis.push([`${iv.name}: ${categories[0]} != ${categories[1]}`]);
-        } else {
+        } else if(two_side === false) {
             hypothesis.push([`${iv.name}: ${categories[0]} > ${categories[1]}`]);
+        } else {
+            hypothesis.push([`${iv.name}: ${categories[0]} = ${categories[1]}`]);
         }
     } else {
         const positive = relationship['positive'];

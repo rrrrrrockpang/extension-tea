@@ -18,10 +18,6 @@ const addDisplayArea = (id, playground) => {
     if(id === ANALYSIS_ID) {
         preregistea.append(createAnalysisTwoColumnsForm());
     }
-    // else if(id === SAMPLESIZE_ID) {
-    //     preregistea.append(createPowerChart());
-    // }
-
 }
 
 const addInputArea = (id, playground) => {
@@ -39,9 +35,6 @@ const addInputForm = (id, form_id) => {
     } else if(id === HYPOTHESIS_ID) {
         inputForm = createConstructForm();
     }
-    // else if(id === SAMPLESIZE_ID) {
-    //     inputForm = createPowerInputForm();
-    // }
     return inputForm;
 }
 
@@ -56,7 +49,7 @@ const addSubmitButton = (id, playground) => {
         initialBtn.on("click", function () {
             const variable = updateVariable(id, inputFormArea);
             clearInputFormArea(inputFormArea);
-            updateDependentVariableContent(id);
+            if(id === DV_ID) updateDependentVariableContent(id);
         })
         inputFormArea.append(initialBtn);
     } else if(id === HYPOTHESIS_ID) {

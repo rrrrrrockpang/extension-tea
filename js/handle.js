@@ -143,7 +143,7 @@ const updateVariableLst = (dvOrIv, variableTea, studyDesignVar) => {
             "data type": di.type,
         };
 
-        if (di.type === "nominal") {
+        if (di.type === "nominal" || di.type === "ordinal") {
             variable["categories"] = di.categories;
         }
         variableTea.push(variable);
@@ -165,9 +165,11 @@ const updateHypothesisFormArea = (hypothesisPair, inputArea) => {
         let relationship;
         if(conditionType === "nominal") {
             let two_side = false;
-            const selected = hypothesisFormArea.find(".two-side:selected").val();
+            const selected = $(".two-side").find(":selected").val();
             if(selected === 'different') {
                 two_side = true;
+            } else if (selected === "same") {
+                two_side = "same";
             }
 
             let cat1 = $(`.iv-group-custom-select-1 option:selected`).val();
@@ -232,7 +234,8 @@ const updateVariable = (section_id, inputForm, variable = null) => {
         variable.section = section_id;
         variable.construct = constructObject;  // TODO: Avoid null pointer; this is probably a bug
         variable.card_id = section_id + "_" + variable.name;
-        variable.study_design = studyDesignArea.val();
+        if(typeof studyDesignArea.val() !== "undefined")
+            variable.study_design = studyDesignArea.val();
         if(constructObject)
             constructObject.selected = true;
         cListener.c = constructs;

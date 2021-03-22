@@ -135,7 +135,7 @@ const createHypothesisConditionIsNominal = (dv, iv) => {
                             </select>
                             <label>group will be</label>
                             <select class="custom-select two-side">
-                                <option value="greater" selected>greater than</option>
+                                <option value="greater">greater than</option>
                                 <option value="less">less than</option>
                                 <option value="different">different from</option>
                                 <option value="same">same as</option>
@@ -228,7 +228,7 @@ const addNewCard = (section_id, variable) => {
             lst.push(addRowInCard("Construct", variable.construct));
         }
 
-        if(variable.study_design !== "") {
+        if(variable.study_design !== "" || typeof variable.study_design === "undefined") {
             lst.push(addRowInCard("Study Design", variable.study_design + " subject factor"));
         }
 
