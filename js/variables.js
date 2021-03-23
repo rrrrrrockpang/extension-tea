@@ -1,3 +1,28 @@
+let dependent_variables = [];
+let conditions = [];
+let suggested = [];
+let variableMap = {};
+let hypothesisPair = {
+    dv: '',
+    iv: ''
+};
+
+let constructs = [];
+let constructMap = {};
+let constructMeasureMap = {};
+
+
+let teaCode = {
+    "variables": [],
+    "study_design": {
+        "study type": "experiment",
+        "independent variables": [],
+        "dependent variables":[]
+    },
+    "hypothesis": []
+};
+
+
 const hypothesisTextAreaNode = $("[name='text1']");
 const dependentVariableTextAreaNode = $("[name='text2']");
 const independentVariableTextAreaNode = $("[name='text3']"); // conditions
