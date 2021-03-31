@@ -2,10 +2,10 @@ $(document).ready(function() {
     const sampleInputArea = $("#sample_size_preregistea");
     sampleInputArea.find(".inputarea").append(createPowerInputForm());
     sampleInputArea.find(".displayarea").append(createPowerChart());
+
 })
 
 const createPowerChart = () => {
-
     const display = $(`<div class="power-analysis"></div>`)
     let graph = d3.select(display[0]);
 
@@ -183,9 +183,10 @@ const createPowerChart = () => {
     focusText.style("opacity", 0)
   }
 
+  update(0.8);
+
     d3.select("#effectSizeNumber").on("change", function(d) {
         var number = d3.select(this).property("value");
-        console.log(number)
         update(parseFloat(number));
     })
 
@@ -208,7 +209,7 @@ const createPowerInputForm = () => {
                                 <label class='form-check-label'><input class='form-check-input' type='radio' name='effectSizeRadios' value='0.2'>
                                     Small Effect (0.2)
                                 </label>
-                                <label class='form-check-label'><input class='form-check-input' type='radio' name='effectSizeRadios' value='0.4'>
+                                <label class='form-check-label'><input class='form-check-input' type='radio' name='effectSizeRadios' value='0.5'>
                                     Medium Effect (0.5)
                                 </label>
                                 <label class='form-check-label'><input class='form-check-input' type='radio' name='effectSizeRadios' value='0.8'>
